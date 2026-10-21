@@ -1,0 +1,11 @@
+# Provided CI configuration; not claimed to have run on the team's remote GitLab.
+python-tests:
+  image: python:3.11-slim
+  script:
+    - python -B -m unittest discover -s tests -v
+
+ui-tests:
+  image: node:22-slim
+  script:
+    - node --check ui/app.js
+    - node tests/test_ui.cjs

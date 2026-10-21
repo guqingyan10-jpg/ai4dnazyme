@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "Please cite the software name, version and the actual source release used in your analysis."
+type: software
+title: "Zyme Site Designer"
+version: "1.0.0"
+date-released: "2026-10-07"
+license: MIT
+# This collective name matches the existing LICENSE; replace it with confirmed
+# contributor or team metadata before publication if a more specific citation is required.
+# No DOI or public repository URL has been issued by this local package.
+authors:
+  - name: "Zyme Site Designer contributors"
+abstract: "Local RNA target-window and complementary DNA binding-arm design with accessibility annotation, optional transcriptome screening and auditable candidate ranking."
+keywords:
+  - MNAzyme
+  - DNAzyme
+  - RNA accessibility
+  - binding-arm design

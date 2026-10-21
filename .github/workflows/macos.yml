@@ -1,0 +1,73 @@
+name: Build and test macOS desktop releases
+
+on:
+  push:
+    branches: [main]
+    paths: ['software/**', 'ci/**', '.github/workflows/macos.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: macos-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: macOS ${{ matrix.arch }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15
+            arch: arm64
+          - runner: macos-15-intel
+            arch: x86_64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 35
+    env:
+      PYTHON_VERSION: '3.13.16'
+      PYTHONNOUSERSITE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      MACOSX_DEPLOYMENT_TARGET: '11.0'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install verified python.org universal2 runtime with Tcl/Tk
+        shell: bash
+        run: |
+          set -euo pipefail
+          pkg="$RUNNER_TEMP/python-${PYTHON_VERSION}.pkg"
+          curl --fail --location --retry 2 "https://www.python.org/ftp/python/${PYTHON_VERSION}/python-${PYTHON_VERSION}-macos11.pkg" --output "$pkg"
+          printf '%s  %s\n' '30666509020b4da0dd8bc2e773255f34d76b7bb80b66960a928d5f6daa0192d7' "$pkg" | shasum -a 256 --check
+          pkgutil --check-signature "$pkg"
+          sudo installer -pkg "$pkg" -target /
+          echo '/Library/Frameworks/Python.framework/Versions/3.13/bin' >> "$GITHUB_PATH"
+      - name: Restore complete example asset and install pinned dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3.13 ci/restore_assets.py
+          python3.13 -m venv "$RUNNER_TEMP/zyme-macos-venv"
+          "$RUNNER_TEMP/zyme-macos-venv/bin/python" -m pip install --upgrade pip
+          "$RUNNER_TEMP/zyme-macos-venv/bin/python" -m pip install -r ci/requirements-macos.txt
+          "$RUNNER_TEMP/zyme-macos-venv/bin/python" -m pip install --no-deps -e ./software
+          echo "$RUNNER_TEMP/zyme-macos-venv/bin" >> "$GITHUB_PATH"
+      - name: Build, launch, compute, export, verify signature and test disk image
+        shell: bash
+        run: python ci/build_macos.py --architecture '${{ matrix.arch }}'
+      - name: Preserve complete build and test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-evidence-${{ matrix.arch }}
+          path: build/qa/**
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Deliver only verified installation packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: ZymeSiteDesigner-macOS-${{ matrix.arch }}
+          path: artifacts/*
+          if-no-files-found: error
+          retention-days: 30

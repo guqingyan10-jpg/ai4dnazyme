@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'">
+  <title>Zyme Site Designer | Quick start</title>
+  <link rel="icon" href="assets/zyme-mark.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero"><div class="hero-top"><a class="wordmark" href="index.html"><img src="assets/zyme-mark.svg" alt="">Zyme Site Designer</a><a class="button secondary" href="index.html">Open workspace →</a></div><span class="eyebrow">A LOCAL WORKFLOW. A SHAREABLE RESULT.</span><h1>From your RNA to a design.</h1><p>Run the calculation on your computer. Review and share the resulting evidence in your browser.</p></header>
+  <main>
+    <div class="guide-flow"><strong>01 Transcript</strong><span>→</span><strong>02 Local analysis</strong><span>→</span><strong>03 Review &amp; export</strong></div>
+    <div class="guide-grid">
+      <section class="panel guide-step"><span class="eyebrow">FOR THE FIRST-TIME USER</span><h2>Use the desktop application</h2><ol><li>Download the complete Windows bundle from the software's release repository. Extract the ZIP; keep its files together.</li><li>Open <code>ZymeSiteDesigner.exe</code>. Choose a FASTA transcript or paste its sequence in <strong>Transcript</strong>.</li><li>In <strong>Design</strong>, set the cut motif, left and right arm lengths, and folding settings. Supply a reference FASTA for off-target screening.</li><li>Select <strong>Run analysis</strong>. When it completes, open the generated report or load <code>result.json</code> in this workspace.</li></ol><p>The portable build includes its computational runtime. No cloud account, GPU or server is needed. This page does not download or execute the desktop application.</p></section>
+      <section class="panel guide-step"><span class="eyebrow">FOR REPRODUCIBLE WORKFLOWS</span><h2>Use Python &amp; the command line</h2><p>In the source-project folder, use Python 3.10 or later:</p><pre>python -m pip install -e ".[desktop]"
+python desktop_entry.py</pre><p>A folding analysis without a reference screen:</p><pre>python -m zyme_designer design --target-fasta examples/BIRC5_NM_001168_3.fasta --gene BIRC5 --left-lengths 7,8,9 --right-lengths 7,8,9 --motif AG --fold --fold-backend python --temperature 37 --window 200 --span 150 --out results/my_design</pre><p>Choose a new output folder for each run. Add <code>--transcriptome</code> and a versioned <code>--reference-label</code> to evaluate reference matches. The reference library is not bundled.</p></section>
+      <section class="panel guide-step"><span class="eyebrow">WHAT TO BRING INTO THIS WORKSPACE</span><h2>One result. Several ways to explore.</h2><p><strong>result.json</strong> contains the target, candidates, match records and analysis metadata. Use <strong>Open results</strong>; files are parsed locally, not sent to a server.</p><p>Search or sort the candidate library. Select a point or table row to inspect that design. Export the selection as CSV or FASTA, or export all filtered records.</p><p><strong>Structure viewer</strong> opens your PDB or mmCIF coordinates. It does not run AlphaFold. A chain-mapping JSON can highlight a recognition region.</p><a class="button secondary" href="structure.html">Open structure viewer →</a></section>
+      <section class="panel guide-step"><span class="eyebrow">START WITH THE RIGHT COMPARISON</span><h2>Read the evidence, not just the score.</h2><p>Arm length is a trade-off: short arms may lack specificity; long, tightly bound arms can complicate product release. Inspect the actual lengths, binding estimates and screening results together.</p><p>Use the AG preset for the project's 8–17 design, or define another dinucleotide motif. A custom motif is a design constraint, not a guarantee that another catalytic core will cleave it.</p><p>A missing screening result is not zero off-targets. An accessible window is not a measured cleavage rate.</p></section>
+    </div>
+    <div class="guide-note"><strong>About the BIRC5 example.</strong> It is a saved program run, not a new calculation performed by this webpage. Its small demonstration reference is explicitly not the human transcriptome. The run's actual scope and missing fields remain visible in the workspace.</div>
+  </main>
+  <footer><span>Zyme Site Designer / Offline quick start</span><span>Original code: MIT · Third-party components retain their licenses</span></footer>
+</body>
+</html>

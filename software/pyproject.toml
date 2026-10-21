@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zyme-site-designer"
+version = "1.0.0"
+description = "Local RNA cleavage-window and DNA binding-arm design with interpretable sequence/accessibility tradeoffs"
+requires-python = ">=3.10"
+dependencies = []
+license = {file = "LICENSE"}
+
+[project.optional-dependencies]
+fastscan = ["pyahocorasick>=2.1,<3"]
+desktop = ["ViennaRNA==2.7.2", "pyahocorasick>=2.1,<3"]
+
+[project.scripts]
+zyme-site-designer = "zyme_designer.cli:main"
+zyme-site-designer-desktop = "zyme_designer.desktop:main"
+
+[tool.setuptools.packages.find]
+include = ["zyme_designer*"]

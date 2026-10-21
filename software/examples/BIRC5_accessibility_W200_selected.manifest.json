@@ -1,0 +1,17 @@
+{
+  "sequence_sha256_rna": "b9d001c1d678a5597f226cc7db46a2063c20accbd0edd9470f802441a2930988",
+  "sequence_length_nt": 2574,
+  "site_table_sha256": "3213ccc25edf7322f396ddba2a0e27a726b1b73851d35954743c3db42d9fe6a5",
+  "parameters": {
+    "W": 200,
+    "L": 150,
+    "u": 16,
+    "T": 37,
+    "salt_molar": 1.021
+  },
+  "parameter_provenance": "Archived selected transcript/site RNAplfold run; only three canonical BIRC5 candidate probabilities in this table",
+  "source_project_relative_path": "outputs/MNAzyme_wiki_finalization_20261005_v1/source_data/accessibility_all49.csv",
+  "source_file_sha256": "3213ccc25edf7322f396ddba2a0e27a726b1b73851d35954743c3db42d9fe6a5",
+  "new_folding_executed": false,
+  "scope": "historical project analysis tables, not prospective validation of new designs"
+}

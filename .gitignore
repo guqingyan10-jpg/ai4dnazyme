@@ -1,0 +1,8 @@
+build/
+artifacts/
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+.DS_Store
+software/ui/demo-data.js

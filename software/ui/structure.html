@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Zyme Site Designer | Structure viewer</title>
+  <link rel="icon" href="assets/zyme-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .structure-layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:20px}
+    #structure-canvas{width:100%;height:570px;display:block;border-radius:8px;background:#102a34;touch-action:none}
+    .structure-controls{display:flex;flex-wrap:wrap;gap:14px;margin:0 0 16px;align-items:center}
+    .structure-controls label{font-size:12px;color:var(--muted)}
+    .structure-controls input{display:block;margin-top:5px}
+    .chain-row{display:flex;gap:10px;align-items:center;margin:8px 0;font-size:13px}.swatch{width:12px;height:12px;border-radius:3px}
+    .structure-layout aside{padding:20px;background:white;border:1px solid var(--line);border-radius:8px}
+    .structure-layout aside label{font-size:12px}
+    .structure-layout aside select{display:block;width:100%;margin-top:6px}
+    #coordinate-info{white-space:pre-wrap;word-break:break-word;font-size:12px}
+    input[type=file]{max-width:300px}#structure-status{min-height:24px;font-size:12px;color:var(--muted)}
+    .viewer-actions{display:flex;gap:8px;margin:16px 0}
+    .structure-layout aside details{border-top:1px solid var(--line);padding-top:14px}
+    .structure-layout aside small{font-size:11px;color:var(--muted)}
+    @media(max-width:900px){.structure-layout{grid-template-columns:1fr}#structure-canvas{height:450px}}
+    @media(max-width:540px){#structure-canvas{height:360px}.structure-controls{align-items:stretch}.structure-controls label{width:100%}input[type=file]{width:100%;max-width:none}}
+  </style>
+</head>
+<body>
+  <header class="hero"><div class="hero-top"><a class="wordmark" href="index.html"><img src="assets/zyme-mark.svg" alt="">Zyme Site Designer</a><a class="button secondary" href="index.html">Design workspace →</a></div><span class="eyebrow">COORDINATES, IN CONTEXT</span><h1>Explore the structure.</h1><p>Open your PDB or mmCIF file. Rotate, inspect chains and highlight the recognition region.</p></header>
+  <main>
+    <div class="structure-controls">
+      <label>Coordinate file <input id="coordinate-file" type="file" accept=".pdb,.ent,.cif,.mmcif"></label>
+      <label>Chain mapping (optional) <input id="mapping-file" type="file" accept=".json"></label>
+    </div>
+    <p id="structure-status" role="status" aria-live="polite">Open a coordinate file to begin.</p>
+    <section class="structure-layout">
+      <canvas id="structure-canvas" aria-label="Rotatable molecular coordinate preview"></canvas>
+      <aside>
+        <h2>Display</h2>
+        <label>Representation <select id="representation"><option value="backbone">Nucleic acid / protein backbone</option><option value="atoms">Heavy-atom points (up to 15,000)</option></select></label>
+        <p><label>Colour <select id="colour-mode"><option value="chain">Chain</option><option value="confidence">pLDDT</option></select></label></p>
+        <p><label><input id="plddt-confirm" type="checkbox"> B-factor stores pLDDT in this file</label></p>
+        <div class="viewer-actions"><button id="reset-camera" class="secondary">Reset view</button><button id="save-image" class="secondary">Save PNG</button></div>
+        <h3>Chains</h3><div id="chain-list"></div>
+        <details><summary>Highlight a region</summary>
+          <p><label>Chain <input id="highlight-chain" value="C" size="5"></label></p>
+          <p><label>Residue range <input id="highlight-start" type="number" min="1" value="1" style="width:70px"> — <input id="highlight-end" type="number" min="1" value="16" style="width:70px"></label></p>
+          <button id="apply-highlight">Apply highlight</button>
+          <p><small>A matching chain_mapping.json highlights the target automatically. Manual values refer to residue numbers within the supplied structure.</small></p>
+        </details>
+        <pre id="coordinate-info"></pre>
+        <p><small>Drag to rotate · Scroll to zoom</small></p>
+      </aside>
+    </section>
+    <section class="panel methods"><details><summary>About the coordinate viewer</summary><p>This viewer renders supplied coordinates; it does not run AlphaFold or predict a structure. Backbone lines are visual guides rather than validated covalent bonds. Only the first model and the preferred alternate location are shown.</p><p>B-factor values are interpreted as pLDDT only when explicitly confirmed. Coordinate coverage and prediction confidence are separate from RNA accessibility and do not affect candidate ranking.</p></details></section>
+  </main>
+  <footer>Zyme Site Designer · Research software · Files are processed locally</footer>
+  <script src="structure.js"></script>
+</body>
+</html>
